@@ -44,4 +44,36 @@ export class VehicleController {
       return res.status(404).json({ error: error });
     }
   };
+
+  public updateVehicle = async (
+    req: Request,
+    res: Response,
+  ): Promise<Response> => {
+    const { vehicleId } = req.params;
+    const vehicleData = req.body;
+
+    try {
+      const vehicle = await this.vehicleService.updateVehicle(
+        vehicleId,
+        vehicleData,
+      );
+      return res.status(200).json({ vehicle });
+    } catch (error) {
+      return res.status(404).json({ error: error });
+    }
+  };
+
+  public deleteVehicle = async (
+    req: Request,
+    res: Response,
+  ): Promise<Response> => {
+    const { vehicleId } = req.params;
+
+    try {
+      await this.vehicleService.deleteVehicle(vehicleId);
+      return res.status(204).json({ message: 'Vehicle successfully deleted.' });
+    } catch (error) {
+      return res.status(404).json({ error: error });
+    }
+  };
 }
