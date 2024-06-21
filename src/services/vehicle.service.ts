@@ -26,4 +26,31 @@ export class VehicleService {
 
     return vehicle;
   };
+
+  public updateVehicle = async (
+    vehicleId: string,
+    vehicleData: string,
+  ): Promise<Vehicle> => {
+    const vehicle = await this.vehicleRepository.findOne({
+      where: { VehicleID: vehicleId },
+    });
+
+    if (!vehicle) {
+      throw new Error(`Vehicle with ID ${vehicleId} not found`);
+    }
+
+    Object.assign(vehicle, vehicleData);
+
+    const updatedVehicle = this.vehicleRepository.save(vehicle);
+
+    return updatedVehicle;
+  };
+
+  public deleteVehicle = async (vehicleId: string): Promise<void> => {
+    const deletedVehicle = await this.vehicleRepository.delete(vehicleId);
+
+    if (deletedVehicle.affected === 0) {
+      throw new Error(`Vehicle with ID ${vehicleId} not found`);
+    }
+  };
 }
